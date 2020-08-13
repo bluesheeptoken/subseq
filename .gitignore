@@ -1,0 +1,14 @@
+# C extensions
+subseq/*.so
+subseq/*.cpp
+subseq/cpp_sources/*.o
+
+# build
+build/
+test_build/
+
+# pycaches
+*/__pycache__/
+
+# venv
+venv/

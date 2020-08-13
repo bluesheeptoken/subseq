@@ -1,0 +1,37 @@
+# distutils: language = c++
+
+from libcpp.vector cimport vector
+from subseq.alphabet cimport Alphabet
+
+
+cdef extern from "cpp_sources/CSubseq.hpp":
+    cdef cppclass CSubseq nogil:
+        CSubseq(vector[int], int, int) except +
+        int predict(vector[int])
+
+cdef class Subseq:
+    cdef CSubseq *thisptr
+    cdef readonly Alphabet alphabet
+    cdef public int threshold_query
+
+    def __init__(self, int threshold_query):
+        self.alphabet = Alphabet()
+        self.threshold_query = threshold_query
+
+    def fit(self, sequences):
+        cdef vector[int] text
+        for sequence in sequences:
+            for symbol in sequence:
+                text.push_back(self.alphabet.add_symbol(symbol))
+            text.push_back(0)  # Seperate sequences by symbol 0
+
+        self.thisptr = new CSubseq(text, self.alphabet.length(), self.threshold_query)
+    
+    def __dealloc__(self):
+        del self.thisptr
+
+    def predict(self, query):
+        cdef vector[int] int_query
+        for symbol in query:
+            int_query.push_back(self.alphabet.add_symbol(symbol))
+        return self.alphabet.get_symbol(self.thisptr.predict(int_query))
