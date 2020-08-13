@@ -14,16 +14,7 @@ clean:
 	rm -f ${SRC_DIR}/*.cpp
 
 cmake_cpp_sources:
-	cmake ${CPP_SRC_DIR}
-
-lint_cpp: cmake_cpp_sources
-	cpplint test_cpp/*.cpp
-	make -C ${CPP_SRC_DIR} clang-tidy
-	make -C ${CPP_SRC_DIR} clang-format
-
-lint_python:
-	black ${PYTHON_TEST_DIR}
-
+	cmake ${CPP_SRC_DIR} -B ${CPP_SRC_DIR}
 lint: lint_cpp lint_python
 
 lint_check: cmake_cpp_sources
