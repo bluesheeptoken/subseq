@@ -1,0 +1,7 @@
+include setup.py
+include subseq/*.pyx
+include subseq/*.pxd
+include subseq/cpp_sources/*
+
+exclude subseq/cpp_sources/.clang-format
+exclude subseq/cpp_sources/.clang-tidy
