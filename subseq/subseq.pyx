@@ -14,7 +14,7 @@ cdef class Subseq:
     cdef readonly Alphabet alphabet
     cdef public int threshold_query
 
-    def __init__(self, int threshold_query):
+    def __init__(self, int threshold_query=0):
         self.alphabet = Alphabet()
         self.threshold_query = threshold_query
 
@@ -26,7 +26,7 @@ cdef class Subseq:
             text.push_back(0)  # Seperate sequences by symbol 0
 
         self.thisptr = new CSubseq(text, self.alphabet.length(), self.threshold_query)
-    
+
     def __dealloc__(self):
         del self.thisptr
 
