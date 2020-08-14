@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <bitset>
+#include <iterator>
 
 Indexes shift_one(Indexes ints);
 Indexes sort_cyclic_shifts(Letters const &text, std::size_t alphabet_size);

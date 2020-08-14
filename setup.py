@@ -1,11 +1,16 @@
-from distutils.core import setup
+import setuptools
+from setuptools import setup
 from distutils.extension import Extension
 from Cython.Build import cythonize
 import sys
 from os import path
+import platform
 
 
-compile_args = ["-std=c++11"]
+if platform.system() == "Windows":
+    compile_args = []
+else:
+    compile_args = ["-std=c++11"]
 
 module = Extension(
     "*",
@@ -53,5 +58,5 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url=url,
-    python_requires=">=3.6, <4",
+    python_requires=">=3.5, <4",
 )
