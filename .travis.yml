@@ -1,0 +1,25 @@
+language: python
+
+matrix:
+  include:
+    - services: docker
+    - os: osx
+      language: shell
+
+env:
+  global:
+    - CIBW_BUILD="cp3?-*"
+    - CIBW_BEFORE_TEST="CC=gcc CXX=g++ python -m pip install pytest cython>=0.20"
+    - CIBW_TEST_COMMAND="cd {project}; make build; make test_python"
+    - CIBW_BEFORE_BUILD="python -m pip install cython>=0.20"
+
+install:
+  - python3 -m pip install cibuildwheel==1.5.5
+
+script:
+  - |
+      python3 -m cibuildwheel --output-dir dist
+      if [[ $TRAVIS_TAG ]]; then
+        python3 -m pip install twine
+        python3 -m twine upload dist/*.whl
+      fi
