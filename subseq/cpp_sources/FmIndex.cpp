@@ -28,6 +28,11 @@ const std::pair<int, int> FmIndex::backward_search(const Letters &query) {
     int start = 0;
     int end = m_tree.size();
     for (int letter : query) {
+        if (letter < 0) {
+            start = 0;
+            end = 0;
+            break;
+        }
         start = m_occurrences[letter] + m_tree.rank(letter, start);
         end = m_occurrences[letter] + m_tree.rank(letter, end);
         if (start == end) break;

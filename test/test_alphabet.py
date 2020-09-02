@@ -30,7 +30,6 @@ class AlphabetTest(unittest.TestCase):
 
     def test_add_known_symbol(self):
         self.assertEqual(self.alphabet.add_symbol("U"), 2)
-        print(self.alphabet.indexes)
         self.assertEqual(self.alphabet.length(), 6)
 
     def test_add_unknown_symbol(self):
