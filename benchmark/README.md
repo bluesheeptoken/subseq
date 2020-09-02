@@ -12,12 +12,14 @@ The training has been made with 20_450 sequences with an average length of 34 an
 
 The benchmark has been realized with a PC with 8 GB of ram, 8 cores and the `Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz` CPU.
 
+The threshold_query used is 1.
+
 ## Running the benchmark
 
 With `FIFA.dat` in the data folder, you can run the benchmark from the benchmark folder: `python benchmark.py`.
 
 ## Results
 
-`Subseq` predicted the entire dataset in approximatively 2 hours, which is an average of 330 ms per prediction.
+`Subseq` predicted the entire dataset in approximatively 14 minutes, which is an average of 41 ms per prediction.
 
 This model takes relatively more time than [`CPT`](https://github.com/bluesheeptoken/CPT/tree/master/benchmark). This is mainly because `Subseq` is doing a lot of Full Text search.
