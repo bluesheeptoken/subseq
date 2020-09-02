@@ -5,7 +5,8 @@
 
 Indexes shift_one(Indexes ints);
 Indexes sort_cyclic_shifts(Letters const &text, std::size_t alphabet_size);
-std::vector<int> counting_sort(Letters const &text, std::size_t alphabet_size);
+std::vector<int> cumulative_sum_occurences(Letters const &text,
+                                           std::size_t alphabet_size);
 
 FmIndex::FmIndex() {}
 
@@ -19,7 +20,7 @@ FmIndex::FmIndex(Letters &text, std::size_t alphabet_size) {
                    [&text](int p) { return text[p]; });
 
     m_tree = WaveletTree(permuted_text, alphabet_size);
-    m_occurrences = counting_sort(text, alphabet_size);
+    m_occurrences = cumulative_sum_occurences(text, alphabet_size);
     m_text_size = text.size();
 }
 
@@ -79,55 +80,71 @@ Indexes shift_one(Indexes ints) {
     return ints;
 }
 
+Indexes counting_sort(std::vector<int> const &values,
+                      Indexes const &permutation, std::size_t range) {
+    int n = values.size();
+    Indexes new_permutation(n);
+    std::vector<int> cnt(range);
+
+    for (int i = 0; i < n; i++) cnt[values[permutation[i]]]++;
+    for (std::size_t i = 1; i < range; i++) cnt[i] += cnt[i - 1];
+    for (int i = n - 1; i >= 0; i--)
+        new_permutation[--cnt[values[permutation[i]]]] = permutation[i];
+
+    return new_permutation;
+}
+
+std::vector<int> generate_classes(std::vector<int> const &values,
+                                  Indexes const &permutation, int text_size,
+                                  int substring_length) {
+    std::vector<int> classes(text_size);
+
+    classes[permutation[0]] = 0;
+    int nb_classes = 1;
+    for (int i = 1; i < text_size; i++) {
+        std::pair<int, int> cur = {
+            values[permutation[i]],
+            values[(permutation[i] + substring_length) % text_size]};
+        std::pair<int, int> prev = {
+            values[permutation[i - 1]],
+            values[(permutation[i - 1] + substring_length) % text_size]};
+        if (cur != prev) ++nb_classes;
+        classes[permutation[i]] = nb_classes - 1;
+    }
+    return classes;
+}
+
 // Heavily inspired from https://cp-algorithms.com/string/suffix-array.html
 Indexes sort_cyclic_shifts(Letters const &text, std::size_t alphabet_size) {
     // Initialization
     int n = text.size();
-    Indexes permutations(n);
-    std::vector<int> classes(n), cnt(std::max(alphabet_size, text.size()), 0);
-    for (int i = 0; i < n; i++) cnt[text[i]]++;
-    for (std::size_t i = 1; i < alphabet_size; i++) cnt[i] += cnt[i - 1];
-    for (int i = 0; i < n; i++) permutations[--cnt[text[i]]] = i;
-    classes[permutations[0]] = 0;
-    int nb_classes = 1;
-    for (int i = 1; i < n; i++) {
-        if (text[permutations[i]] != text[permutations[i - 1]]) nb_classes++;
-        classes[permutations[i]] = nb_classes - 1;
-    }
+    Indexes permutation(n);
+
+    for (int i = 0; i < n; i++) permutation[i] = i;
+
+    permutation = counting_sort(text, permutation, alphabet_size);
+
+    std::vector<int> classes = text;
+    classes = generate_classes(classes, permutation, n, 0);
 
     // steps
-    Indexes permutations_n(n);
-    std::vector<int> classes_n(n);
     for (int h = 1; h < n; h *= 2) {
-        for (int i = 0; i < n; i++) {
-            permutations_n[i] = permutations[i] - h;
-            if (permutations_n[i] < 0) permutations_n[i] += n;
-        }
+        int nb_classes = classes[permutation.back()] + 1;
 
-        fill(cnt.begin(), cnt.end(), 0);
+        std::transform(permutation.begin(), permutation.end(),
+                       permutation.begin(),
+                       [n, h](int p) { return p < h ? p - h + n : p - h; });
 
-        for (int i = 0; i < n; i++) cnt[classes[permutations_n[i]]]++;
-        for (int i = 1; i < nb_classes; i++) cnt[i] += cnt[i - 1];
-        for (int i = n - 1; i >= 0; i--)
-            permutations[--cnt[classes[permutations_n[i]]]] = permutations_n[i];
-        classes_n[permutations[0]] = 0;
-        nb_classes = 1;
-        for (int i = 1; i < n; i++) {
-            std::pair<int, int> cur = {classes[permutations[i]],
-                                       classes[(permutations[i] + h) % n]};
-            std::pair<int, int> prev = {
-                classes[permutations[i - 1]],
-                classes[(permutations[i - 1] + (1 << h)) % n]};
-            if (cur != prev) ++nb_classes;
-            classes_n[permutations[i]] = nb_classes - 1;
-        }
-        classes.swap(classes_n);
+        permutation = counting_sort(classes, permutation, nb_classes);
+
+        classes = generate_classes(classes, permutation, n, h);
     }
 
-    return permutations;
+    return permutation;
 }
 
-std::vector<int> counting_sort(Letters const &text, std::size_t alphabet_size) {
+std::vector<int> cumulative_sum_occurences(Letters const &text,
+                                           std::size_t alphabet_size) {
     std::vector<int> count(alphabet_size), occurrences(alphabet_size);
     for (auto letter : text) count[letter]++;
     for (std::size_t i = 1; i < alphabet_size; i++)
