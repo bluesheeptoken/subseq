@@ -33,5 +33,5 @@ cdef class Subseq:
     def predict(self, query):
         cdef vector[int] int_query
         for symbol in query:
-            int_query.push_back(self.alphabet.add_symbol(symbol))
+            int_query.push_back(self.alphabet.get_index(symbol))
         return self.alphabet.get_symbol(self.thisptr.predict(int_query))
