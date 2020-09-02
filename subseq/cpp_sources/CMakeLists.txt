@@ -26,8 +26,4 @@ target_include_directories(
         ${CMAKE_CURRENT_LIST_DIR}
 )
 
-# add_definitions(${CMAKE_CXX_FLAGS} "-fno-inline")
-add_definitions(${CMAKE_CXX_FLAGS} "-pg")
-
 include(cmake/clang-cxx-dev-tools.cmake)
-

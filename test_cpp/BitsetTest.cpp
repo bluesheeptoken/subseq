@@ -3,8 +3,8 @@
 
 class BitsetTest : public ::testing::Test {
  protected:
-    std::vector<std::uint8_t> data = {7, 8, 9};
-    std::size_t size = 10;
+    std::vector<std::uint8_t> data = {7, 8, 32, 33};
+    std::size_t size = 34;
     Bitset bitset = Bitset(size);
     void SetUp() override {
         for (auto i : data)
@@ -21,5 +21,5 @@ TEST_F(BitsetTest, at) {
 }
 
 TEST_F(BitsetTest, count_among_first_k_bits) {
-    ASSERT_EQ(bitset.count_among_first_k_bits(9), 2);
+    ASSERT_EQ(bitset.count_among_first_k_bits(33), 3);
 }
