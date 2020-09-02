@@ -15,7 +15,15 @@ clean:
 
 cmake_cpp_sources:
 	cmake ${CPP_SRC_DIR} -B ${CPP_SRC_DIR}
+
 lint: lint_cpp lint_python
+
+lint_cpp: cmake_cpp_sources
+	make -C ${CPP_SRC_DIR} clang-format
+	make -C ${CPP_SRC_DIR} clang-tidy
+
+lint_python:
+	black ${PYTHON_TEST_DIR}
 
 lint_check: cmake_cpp_sources
 	make -C ${CPP_SRC_DIR} clang-format-check
