@@ -13,10 +13,7 @@ This implementation is based on the following research paper:
 
 ## Installation
 
-Installation from the sources.
-On Linux and mac, you can easilly install it via `make build`.
-
-For Windows users, the installation is trickier.
+Subseq is published on pypi. `pip install subseq` should be enough.
 
 ## Simple example
 
