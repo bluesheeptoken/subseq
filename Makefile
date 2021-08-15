@@ -1,10 +1,10 @@
 BUILD_DIR=build
 SRC_DIR=subseq
 CPP_SRC_DIR=subseq/cpp_sources
-PYTHON_TEST_DIR=test
+PYTHON_TEST_DIR=tests
 CPP_TEST_BUILD_DIR=test_build
 
-.PHONY: build test test_cpp
+.PHONY: build tests tests_cpp
 
 build:
 	python3 setup.py build_ext --inplace
@@ -32,7 +32,7 @@ lint_check: cmake_cpp_sources
 test: test_cpp test_python
 
 test_python: build
-	pytest test
+	pytest tests
 
 test_cpp:
 	mkdir -p ${CPP_TEST_BUILD_DIR}
