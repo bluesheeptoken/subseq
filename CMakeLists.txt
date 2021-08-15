@@ -19,4 +19,4 @@ fetch_googletest(
 )
 
 enable_testing()
-add_subdirectory(test_cpp)
+add_subdirectory(tests_cpp)
