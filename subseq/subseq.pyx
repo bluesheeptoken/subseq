@@ -24,7 +24,7 @@ cdef class Subseq:
         for sequence in sequences:
             for symbol in sequence:
                 text.push_back(self.alphabet.add_symbol(symbol))
-            text.push_back(0)  # Seperate sequences by symbol 0
+            text.push_back(0)  # Separate sequences by symbol 0
 
         self.thisptr = new CSubseq(text, self.alphabet.length(), self.threshold_query)
 

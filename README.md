@@ -5,7 +5,7 @@
 This project is a c++ implementation with a python wrapper of the `Succinct BWT-Based Sequence Prediction` model.
 
 Subseq is a sequence prediction model in a finite alphabet.
-It is a lossless model (does not discard information while training) and utilizes the succinct Wavelet Tree data structure and the Burrows-Wheeler Transform to compactly store and eﬃciently access training sequences for prediction.
+It is a lossless model (does not discard information while training) and utilizes the succinct Wavelet Tree data structure and the Burrows-Wheeler Transform to compactly store and efficiently access training sequences for prediction.
 
 This implementation is based on the following research paper:
 
