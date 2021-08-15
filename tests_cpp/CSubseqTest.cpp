@@ -1,14 +1,11 @@
 #include "gtest/gtest.h"
 #include "CSubseq.hpp"
 
-class CSubseqTest : public ::testing::Test {
- protected:
+TEST(CSubseqTest, predict) {
     Letters text = {2, 1, 3, 1, 3, 1, 0};  // banana$
     std::size_t alphabet_size = 4;
     CSubseq subseq = CSubseq(text, alphabet_size, 100);
-};
 
-TEST_F(CSubseqTest, predict) {
     Letters query;
     int expected_prediction;
     int actual_prediction;
@@ -36,4 +33,22 @@ TEST_F(CSubseqTest, predict) {
         actual_prediction,
         expected_prediction
     );
+}
+
+TEST(CSubseqTest, predict_k) {
+    Letters text = {1, 2, 0, 1, 3, 0, 1, 3, 0};
+    std::size_t alphabet_size = 4;
+    CSubseq subseq = CSubseq(text, alphabet_size, 100);
+
+    Letters query = {1};
+    std::vector<int> expected = {3, 2};
+    std::vector<int> actual = subseq.predict_k(query, 2);
+
+    ASSERT_EQ(expected.size(), actual.size());
+
+    for (int i = 0; i < expected.size(); i++)
+        ASSERT_EQ(
+            expected[i],
+            actual[i]
+        );
 }

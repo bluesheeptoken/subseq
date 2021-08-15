@@ -64,7 +64,19 @@ const int CSubseq::predict_subquery(const Letters& query,
 }
 
 const int CSubseq::predict(const std::vector<int>& query) {
-    FrequencyArray frequencyArray(m_alphabet_size);
+    FrequencyArray frequency_array = compute_frequency_array(query);
+    return frequency_array.get_best_letter();
+}
+
+const std::vector<int> CSubseq::predict_k(const std::vector<int>& query,
+                                          std::size_t k) {
+    FrequencyArray frequency_array = compute_frequency_array(query);
+    return frequency_array.get_k_best_letter(k);
+}
+
+const FrequencyArray CSubseq::compute_frequency_array(
+    const std::vector<int>& query) {
+    FrequencyArray frequency_array(m_alphabet_size);
     Bitset bitset(m_fm_index.get_text_size());
     int query_used_counter = 0;
     SubqueryGenerator generator =
@@ -74,9 +86,9 @@ const int CSubseq::predict(const std::vector<int>& query) {
         if (subquery.query.empty()) break;
         query_used_counter += predict_subquery(subquery.query, query.size(),
                                                subquery.number_substitutions,
-                                               bitset, frequencyArray);
+                                               bitset, frequency_array);
         if (m_threshold_query > 0 && query_used_counter >= m_threshold_query)
             break;
     }
-    return frequencyArray.get_best_letter();
+    return frequency_array;
 }

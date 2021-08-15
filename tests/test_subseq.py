@@ -13,3 +13,8 @@ class SubseqTest(unittest.TestCase):
         model = Subseq(0)
         model.fit(["banana"])
         self.assertEqual(model.predict("wna"), "n")
+
+    def test_predict_k(self):
+        model = Subseq(0)
+        model.fit(["ab", "ac", "ac"])
+        self.assertEqual(model.predict_k("a", 2), ["c", "b"])
