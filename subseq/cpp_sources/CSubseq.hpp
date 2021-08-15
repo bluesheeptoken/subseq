@@ -21,8 +21,12 @@ class CSubseq {
         FrequencyArray& frequencyArray);  // return number of updates
 
     const int predict(const std::vector<int>& query);
+    const std::vector<int> predict_k(const std::vector<int>& query,
+                                     std::size_t k);
 
    private:
+    const FrequencyArray compute_frequency_array(const std::vector<int>& query);
+
     FmIndex m_fm_index;
     int m_threshold_query;
     std::size_t m_alphabet_size;

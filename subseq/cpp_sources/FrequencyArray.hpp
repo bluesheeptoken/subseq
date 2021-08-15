@@ -13,6 +13,7 @@ class FrequencyArray {
                                int item_index, int number_of_substitutions);
 
     const int get_best_letter();
+    const std::vector<int> get_k_best_letter(std::size_t k);
 
    private:
     std::vector<float> m_weights;
