@@ -1,3 +1,4 @@
+import pickle
 import unittest
 
 from subseq.alphabet import Alphabet
@@ -35,3 +36,8 @@ class AlphabetTest(unittest.TestCase):
     def test_add_unknown_symbol(self):
         self.assertEqual(self.alphabet.add_symbol("X"), 6)
         self.assertEqual(self.alphabet.length(), 7)
+
+    def test_pickle(self):
+        pickled = pickle.dumps(self.alphabet)
+        unpickled_alphabet = pickle.loads(pickled)
+        self.assertEqual(self.alphabet, unpickled_alphabet)
