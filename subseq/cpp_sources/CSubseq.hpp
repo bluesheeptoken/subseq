@@ -11,8 +11,13 @@
 
 class CSubseq {
    public:
+    struct State {
+      FmIndex::State fm_index_state;
+      std::size_t threshold_query;
+    };
     CSubseq(const std::vector<int>& text, const std::size_t alphabet_size,
             const std::size_t threshold_query);
+    CSubseq(const State& state);
 
     const std::vector<Letters> generate_subqueries(const Letters& query);
     const int predict_subquery(
@@ -23,11 +28,12 @@ class CSubseq {
     const int predict(const std::vector<int>& query);
     const std::vector<int> predict_k(const std::vector<int>& query,
                                      std::size_t k);
+    State get_state();
 
    private:
     const FrequencyArray compute_frequency_array(const std::vector<int>& query);
 
     FmIndex m_fm_index;
-    int m_threshold_query;
+    std::size_t m_threshold_query;
     std::size_t m_alphabet_size;
 };

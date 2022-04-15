@@ -12,6 +12,11 @@ CSubseq::CSubseq(const std::vector<int>& text, const std::size_t alphabet_size,
     m_fm_index = FmIndex(letters, alphabet_size);
 }
 
+CSubseq::CSubseq(const State& state)
+    : m_fm_index(FmIndex::create_from_state(state.fm_index_state)),
+      m_threshold_query(state.threshold_query),
+      m_alphabet_size(state.fm_index_state.alphabet_size) {}
+
 const std::vector<Letters> CSubseq::generate_subqueries(const Letters& query) {
     Letters mutable_query(query);
     std::vector<Letters> subqueries;
@@ -92,3 +97,11 @@ const FrequencyArray CSubseq::compute_frequency_array(
     }
     return frequency_array;
 }
+
+CSubseq::State CSubseq::get_state() {
+    return State {
+        m_fm_index.get_state(),
+        m_threshold_query,
+    };
+}
+
