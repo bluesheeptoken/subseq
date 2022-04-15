@@ -11,18 +11,33 @@ std::vector<int> cumulative_sum_occurences(Letters const &text,
 
 FmIndex::FmIndex() {}
 
-FmIndex::FmIndex(Letters &text, std::size_t alphabet_size) {
-    std::reverse(text.begin(), text.end());
-    Indexes permutations = sort_cyclic_shifts(text, alphabet_size);
-    Indexes shifted_permutations = shift_one(permutations);
-    Letters permuted_text;
-    std::transform(shifted_permutations.begin(), shifted_permutations.end(),
-                   std::back_inserter(permuted_text),
-                   [&text](int p) { return text[p]; });
+FmIndex::FmIndex(Letters &text, std::size_t alphabet_size)
+    : FmIndex([&text, alphabet_size] {
+        std::reverse(text.begin(), text.end());
+        Indexes permutations = sort_cyclic_shifts(text, alphabet_size);
+        Indexes shifted_permutations = shift_one(permutations);
+        Letters permuted_text;
+        std::transform(shifted_permutations.begin(), shifted_permutations.end(),
+                       std::back_inserter(permuted_text),
+                       [&text](int p) { return text[p]; });
+        return permuted_text;
+}(), alphabet_size, { }) {}
 
+FmIndex::FmIndex(const Letters& permuted_text, std::size_t alphabet_size, permuted_constructor) {
     m_tree = WaveletTree(permuted_text, alphabet_size);
-    m_occurrences = cumulative_sum_occurences(text, alphabet_size);
-    m_text_size = text.size();
+    m_occurrences = cumulative_sum_occurences(permuted_text, alphabet_size);
+    m_text_size = permuted_text.size();
+}
+
+FmIndex FmIndex::create_from_state(const FmIndex::State& state) {
+    return FmIndex(state.permuted_text, state.alphabet_size, { });
+}
+
+FmIndex::State FmIndex::get_state() {
+    return State {
+        get_permuted_text(),
+        m_tree.get_alphabet_size(),
+    };
 }
 
 const std::pair<int, int> FmIndex::backward_search(const Letters &query) {
@@ -74,6 +89,14 @@ const Letters FmIndex::get_subsequent_sequence(int index) {
 const int FmIndex::get_index_next_element(int index) {
     int c = m_tree[index];
     return m_occurrences[c] + m_tree.rank(c, index);
+}
+
+Letters FmIndex::get_permuted_text() {
+    Letters permuted_text;
+    for(int i = 0; i < m_text_size; i++) {
+        permuted_text.push_back(m_tree[i]);
+    }
+    return permuted_text;
 }
 
 Indexes shift_one(Indexes ints) {

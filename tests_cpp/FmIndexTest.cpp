@@ -86,3 +86,35 @@ TEST_F(FmIndexTest, get_subsequent_sequence) {
             expected_subsequent_sequence[i]
         );
 }
+
+TEST_F(FmIndexTest, get_state) {
+    FmIndex::State expected_state = FmIndex::State {
+        {2, 3, 3, 0, 1, 1, 1},
+        4,
+    };
+
+    FmIndex::State actual_state = fmIndex.get_state();
+
+    ASSERT_EQ(actual_state.permuted_text.size(), expected_state.permuted_text.size());
+
+    for (int i = 0; i < actual_state.permuted_text.size(); i++)
+        ASSERT_EQ(actual_state.permuted_text[i], expected_state.permuted_text[i]);
+
+    ASSERT_EQ(actual_state.alphabet_size, expected_state.alphabet_size);
+}
+
+TEST_F(FmIndexTest, create_from_state) {
+    FmIndex::State expected_state = FmIndex::State {
+        {2, 3, 3, 0, 1, 1, 1},
+        4,
+    };
+
+    FmIndex::State actual_state = FmIndex::create_from_state(expected_state).get_state();
+
+    ASSERT_EQ(actual_state.permuted_text.size(), expected_state.permuted_text.size());
+
+    for (int i = 0; i < actual_state.permuted_text.size(); i++)
+        ASSERT_EQ(actual_state.permuted_text[i], expected_state.permuted_text[i]);
+
+    ASSERT_EQ(actual_state.alphabet_size, expected_state.alphabet_size);
+}

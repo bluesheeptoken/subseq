@@ -2,6 +2,7 @@
 
 from libcpp.vector cimport vector
 from subseq.alphabet cimport Alphabet
+from cpython.object cimport Py_EQ, Py_NE
 
 
 cdef extern from "cpp_sources/CSubseq.hpp":
@@ -44,3 +45,23 @@ cdef class Subseq:
            int_query.push_back(self.alphabet.get_index(symbol))
         predictions = self.thisptr.predict_k(int_query, k)
         return [self.alphabet.get_symbol(index) for index in predictions]
+
+    def __getstate__(self):
+        return (self.alphabet, self.threshold_query)
+
+    def __setstate__(self, state):
+        alphabet, threshold_query = state
+        self.alphabet = alphabet
+        self.threshold_query = threshold_query
+
+    def __is_equal__(self, other):
+        return self.alphabet == other.alphabet and \
+               self.threshold_query == other.threshold_query
+
+    def __richcmp__(self, other, op):
+        if op == Py_EQ:
+            return self.__is_equal__(other)
+        elif op == Py_NE:
+            return not self.__is_equal__(other)
+        else:
+            assert False
