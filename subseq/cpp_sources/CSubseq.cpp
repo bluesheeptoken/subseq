@@ -83,7 +83,7 @@ const FrequencyArray CSubseq::compute_frequency_array(
     const std::vector<int>& query) {
     FrequencyArray frequency_array(m_alphabet_size);
     Bitset bitset(m_fm_index.get_text_size());
-    int query_used_counter = 0;
+    std::size_t query_used_counter = 0;
     SubqueryGenerator generator =
         SubqueryGenerator(Letters(query.begin(), query.end()));
     while (true) {

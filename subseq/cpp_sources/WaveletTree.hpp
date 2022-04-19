@@ -15,7 +15,7 @@ class WaveletTree {
     const int rank(int character, int l);
     const int operator[](int index);
 
-    const int get_alphabet_size() const { return m_alphabet_size; }
+    const std::size_t get_alphabet_size() const { return m_alphabet_size; }
     const std::size_t size() const { return m_bitsets[0].size(); };
 
    private:
@@ -26,6 +26,6 @@ class WaveletTree {
     std::vector<Bitset> m_bitsets;
     std::vector<int> m_values;
     std::vector<int> m_pivots;
-    int m_alphabet_size;
+    std::size_t m_alphabet_size;
     int build(iterator begin, iterator end, int node_number);
 };

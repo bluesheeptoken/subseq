@@ -59,7 +59,7 @@ const std::pair<int, int> FmIndex::backward_search(const Letters &query) {
 const std::unordered_set<int> FmIndex::next_candidates(const Letters &query) {
     std::unordered_set<int> candidates;
     if (query.empty()) {
-        for (int i = 1; i < m_tree.get_alphabet_size(); i++)
+        for (std::size_t i = 1; i < m_tree.get_alphabet_size(); i++)
             candidates.insert(i);
         return candidates;
     }
@@ -93,7 +93,7 @@ const int FmIndex::get_index_next_element(int index) {
 
 Letters FmIndex::get_permuted_text() {
     Letters permuted_text;
-    for(int i = 0; i < m_text_size; i++) {
+    for(std::size_t i = 0; i < m_text_size; i++) {
         permuted_text.push_back(m_tree[i]);
     }
     return permuted_text;
