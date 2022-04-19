@@ -11,8 +11,8 @@
 class FmIndex {
    public:
     struct State {
-      Letters permuted_text;
-      std::size_t alphabet_size;
+        Letters permuted_text;
+        std::size_t alphabet_size;
     };
     FmIndex();
     FmIndex(Letters& text, std::size_t alphabet_size);
@@ -30,8 +30,9 @@ class FmIndex {
     const std::vector<int>& get_occurrences() const { return m_occurrences; }
 
    private:
-    struct permuted_constructor { };
-    FmIndex(const Letters& permuted_text, std::size_t alphabet_size, permuted_constructor);
+    struct permuted_constructor {};
+    FmIndex(const Letters& permuted_text, std::size_t alphabet_size,
+            permuted_constructor);
     std::size_t m_text_size;
     WaveletTree m_tree;
     std::vector<int> m_occurrences;

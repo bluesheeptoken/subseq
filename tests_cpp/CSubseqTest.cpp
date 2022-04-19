@@ -57,7 +57,8 @@ TEST(CSubseqTest, state) {
     Letters text = {2, 1, 3, 1, 3, 1, 0};  // banana$
     std::size_t alphabet_size = 4;
     CSubseq subseq = CSubseq(text, alphabet_size, 100);
-    CSubseq restored_subseq = CSubseq(subseq.get_state());
+    auto state = subseq.get_state();
+    CSubseq restored_subseq = CSubseq(std::get<0>(state), std::get<1>(state), std::get<2>(state), { });
 
     Letters query;
     int expected_prediction;

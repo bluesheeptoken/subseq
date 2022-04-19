@@ -12,10 +12,13 @@ CSubseq::CSubseq(const std::vector<int>& text, const std::size_t alphabet_size,
     m_fm_index = FmIndex(letters, alphabet_size);
 }
 
-CSubseq::CSubseq(const State& state)
-    : m_fm_index(FmIndex::create_from_state(state.fm_index_state)),
-      m_threshold_query(state.threshold_query),
-      m_alphabet_size(state.fm_index_state.alphabet_size) {}
+CSubseq::CSubseq(const std::vector<int>& permuted_text,
+                 const std::size_t alphabet_size,
+                 const std::size_t threshold_query, permuted_constructor)
+    : m_fm_index(FmIndex::create_from_state((FmIndex::State){
+          Letters(permuted_text.begin(), permuted_text.end()), alphabet_size})),
+      m_alphabet_size(alphabet_size),
+      m_threshold_query(threshold_query) {}
 
 const std::vector<Letters> CSubseq::generate_subqueries(const Letters& query) {
     Letters mutable_query(query);
@@ -98,10 +101,7 @@ const FrequencyArray CSubseq::compute_frequency_array(
     return frequency_array;
 }
 
-CSubseq::State CSubseq::get_state() {
-    return State {
-        m_fm_index.get_state(),
-        m_threshold_query,
-    };
+std::tuple<std::vector<int>, std::size_t, std::size_t> CSubseq::get_state() {
+    FmIndex::State state = m_fm_index.get_state();
+    return {state.permuted_text, state.alphabet_size, m_threshold_query};
 }
-

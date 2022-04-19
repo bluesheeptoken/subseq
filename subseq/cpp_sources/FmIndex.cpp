@@ -12,29 +12,33 @@ std::vector<int> cumulative_sum_occurences(Letters const &text,
 FmIndex::FmIndex() {}
 
 FmIndex::FmIndex(Letters &text, std::size_t alphabet_size)
-    : FmIndex([&text, alphabet_size] {
-        std::reverse(text.begin(), text.end());
-        Indexes permutations = sort_cyclic_shifts(text, alphabet_size);
-        Indexes shifted_permutations = shift_one(permutations);
-        Letters permuted_text;
-        std::transform(shifted_permutations.begin(), shifted_permutations.end(),
-                       std::back_inserter(permuted_text),
-                       [&text](int p) { return text[p]; });
-        return permuted_text;
-}(), alphabet_size, { }) {}
+    : FmIndex(
+          [&text, alphabet_size] {
+              std::reverse(text.begin(), text.end());
+              Indexes permutations = sort_cyclic_shifts(text, alphabet_size);
+              Indexes shifted_permutations = shift_one(permutations);
+              Letters permuted_text;
+              std::transform(shifted_permutations.begin(),
+                             shifted_permutations.end(),
+                             std::back_inserter(permuted_text),
+                             [&text](int p) { return text[p]; });
+              return permuted_text;
+          }(),
+          alphabet_size, {}) {}
 
-FmIndex::FmIndex(const Letters& permuted_text, std::size_t alphabet_size, permuted_constructor) {
+FmIndex::FmIndex(const Letters &permuted_text, std::size_t alphabet_size,
+                 permuted_constructor) {
     m_tree = WaveletTree(permuted_text, alphabet_size);
     m_occurrences = cumulative_sum_occurences(permuted_text, alphabet_size);
     m_text_size = permuted_text.size();
 }
 
-FmIndex FmIndex::create_from_state(const FmIndex::State& state) {
-    return FmIndex(state.permuted_text, state.alphabet_size, { });
+FmIndex FmIndex::create_from_state(const FmIndex::State &state) {
+    return FmIndex(state.permuted_text, state.alphabet_size, {});
 }
 
 FmIndex::State FmIndex::get_state() {
-    return State {
+    return State{
         get_permuted_text(),
         m_tree.get_alphabet_size(),
     };
@@ -93,7 +97,7 @@ const int FmIndex::get_index_next_element(int index) {
 
 Letters FmIndex::get_permuted_text() {
     Letters permuted_text;
-    for(std::size_t i = 0; i < m_text_size; i++) {
+    for (std::size_t i = 0; i < m_text_size; i++) {
         permuted_text.push_back(m_tree[i]);
     }
     return permuted_text;
