@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 #include <tuple>
 #include <vector>
 
@@ -13,6 +14,8 @@ class CSubseq {
    public:
     CSubseq(const std::vector<int>& text, const std::size_t alphabet_size,
             const std::size_t threshold_query);
+    CSubseq() = default;
+    CSubseq(const std::string& state);
 
     const std::vector<Letters> generate_subqueries(const Letters& query);
     const int predict_subquery(
@@ -23,6 +26,8 @@ class CSubseq {
     const int predict(const std::vector<int>& query);
     const std::vector<int> predict_k(const std::vector<int>& query,
                                      std::size_t k);
+
+    const std::string get_state() const;
 
    private:
     const FrequencyArray compute_frequency_array(const std::vector<int>& query);

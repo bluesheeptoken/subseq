@@ -5,3 +5,5 @@ include subseq/cpp_sources/*
 
 exclude subseq/cpp_sources/.clang-format
 exclude subseq/cpp_sources/.clang-tidy
+exclude subseq/cpp_sources/cmake_install.cmake
+exclude cpp_sources/libsubseq_cpp.a

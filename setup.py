@@ -12,6 +12,8 @@ if platform.system() == "Windows":
 else:
     compile_args = ["-std=c++11"]
 
+cereal_path = path.join("subseq", "cpp_sources", "_deps", "cereal-src", "include")
+
 module = Extension(
     "*",
     [
@@ -23,6 +25,7 @@ module = Extension(
         "subseq/cpp_sources/WaveletTree.cpp",
         "subseq/cpp_sources/SubqueryGenerator.cpp",
     ],
+    include_dirs=[cereal_path],
     language="c++",
     extra_compile_args=compile_args,
     extra_link_args=compile_args,

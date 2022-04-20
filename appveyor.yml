@@ -47,6 +47,7 @@ install:
   - "SET TOXPYTHON=%PYTHON_HOME%\\python.exe"
   - "python --version"
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
+  - "cmake subseq\\cpp_sources -B subseq\\cpp_sources"
   - "python -m pip install --upgrade pip cython pytest tox ppu"
   - "pip --version"
 

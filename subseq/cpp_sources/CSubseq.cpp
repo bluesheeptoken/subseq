@@ -1,6 +1,8 @@
 #include "CSubseq.hpp"
 
 #include <algorithm>
+#include <cereal/archives/binary.hpp>
+#include <sstream>
 #include <utility>
 
 #include "SubqueryGenerator.hpp"
@@ -10,6 +12,12 @@ CSubseq::CSubseq(const std::vector<int>& text, const std::size_t alphabet_size,
     : m_threshold_query(threshold_query), m_alphabet_size(alphabet_size) {
     Letters letters = Letters(text.begin(), text.end());
     m_fm_index = FmIndex(letters, alphabet_size);
+}
+
+CSubseq::CSubseq(const std::string& state) {
+    std::istringstream stream(state);
+    cereal::BinaryInputArchive archive(stream);
+    archive(m_fm_index, m_threshold_query, m_alphabet_size);
 }
 
 const std::vector<Letters> CSubseq::generate_subqueries(const Letters& query) {
@@ -92,3 +100,12 @@ const FrequencyArray CSubseq::compute_frequency_array(
     }
     return frequency_array;
 }
+
+const std::string CSubseq::get_state() const {
+    std::stringstream stream;
+    {
+        cereal::BinaryOutputArchive archive(stream);
+        archive(m_fm_index, m_threshold_query, m_alphabet_size);
+    }
+    return stream.str();
+};

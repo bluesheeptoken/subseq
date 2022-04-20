@@ -14,6 +14,7 @@ python -m pip install cython
 python -m pip install twine
 
 cd subseq/subseq
+make
 python setup.py sdist
 
 # Check whether the source distribution will render correctly
