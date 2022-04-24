@@ -1,6 +1,7 @@
 import unittest
 
 from subseq.subseq import Subseq
+import pickle
 
 
 class SubseqTest(unittest.TestCase):
@@ -18,3 +19,10 @@ class SubseqTest(unittest.TestCase):
         model = Subseq(0)
         model.fit(["ab", "ac", "ac"])
         self.assertEqual(model.predict_k("a", 2), ["c", "b"])
+
+    def test_pickle(self):
+        model = Subseq(0)
+        model.fit(["banana"])
+        pickled = pickle.dumps(model)
+        unpickled = pickle.loads(pickled)
+        self.assertEqual(unpickled.predict("ana"), "n")
