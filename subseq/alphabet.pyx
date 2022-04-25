@@ -24,5 +24,25 @@ cdef class Alphabet:
             self.symbols.append(symbol)
         return index
 
+    def __getstate__(self):
+        return (self.indexes, self.symbols)
+
+    def __setstate__(self, state):
+        indexes, symbols = state
+        self.indexes = indexes
+        self.symbols = symbols
+
+    def __is_equal__(self, other):
+        return self.indexes == other.indexes and \
+               self.symbols == other.symbols
+
+    def __richcmp__(self, other, op):
+        if op == Py_EQ:
+            return self.__is_equal__(other)
+        elif op == Py_NE:
+            return not self.__is_equal__(other)
+        else:
+            assert False
+
     def __repr__(self):
         return f"{{indexes: {self.indexes}, symbols: {self.symbols}}}"

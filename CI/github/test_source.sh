@@ -11,6 +11,7 @@ source test_env/bin/activate
 cd subseq/subseq
 
 python -m pip install cython pytest
+make
 python setup.py install
 
 cd ../..

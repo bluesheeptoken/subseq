@@ -6,7 +6,8 @@ CPP_TEST_BUILD_DIR=test_build
 
 .PHONY: build tests tests_cpp
 
-build:
+build: cmake_cpp_sources
+	make -C ${CPP_SRC_DIR}
 	python3 setup.py build_ext --inplace
 
 clean:

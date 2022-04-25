@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cereal/archives/binary.hpp>
+#include <cereal/types/vector.hpp>
 #include <cstdint>
 #include <unordered_set>
 #include <utility>
@@ -21,6 +23,10 @@ class FmIndex {
     const std::size_t get_text_size() const { return m_text_size; }
     const WaveletTree& get_tree() { return m_tree; }
     const std::vector<int>& get_occurrences() const { return m_occurrences; }
+    template <class Archive>
+    void serialize(Archive& archive) {
+        archive(m_text_size, m_tree, m_occurrences);
+    }
 
    private:
     std::size_t m_text_size;

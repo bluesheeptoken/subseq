@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cereal/archives/binary.hpp>
+#include <cereal/types/utility.hpp>
+#include <cereal/types/vector.hpp>
 #include <iostream>
 #include <utility>
 #include <vector>
@@ -17,6 +20,10 @@ class WaveletTree {
 
     const int get_alphabet_size() const { return m_alphabet_size; }
     const std::size_t size() const { return m_bitsets[0].size(); };
+    template <class Archive>
+    void serialize(Archive& archive) {
+        archive(m_children, m_bitsets, m_values, m_pivots, m_alphabet_size);
+    }
 
    private:
     const int rank(int character, int l, int node_number);
