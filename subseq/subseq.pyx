@@ -23,6 +23,14 @@ cdef class Subseq:
         self.threshold_query = threshold_query
 
     def fit(self, sequences):
+        """Train the model
+
+        Parameters:
+        sequences (list[list[any]])
+
+        Returns:
+        None
+        """
         cdef vector[int] text
         for sequence in sequences:
             for symbol in sequence:
@@ -35,12 +43,29 @@ cdef class Subseq:
         del self.thisptr
 
     def predict(self, query):
+        """Predict the next element
+        
+        Parameters:
+        query (list[any]), any: should be of the same type as the fit method.
+
+        Returns:
+        optional[int]: The prediction if any
+        """
         cdef vector[int] int_query
         for symbol in query:
             int_query.push_back(self.alphabet.get_index(symbol))
         return self.alphabet.get_symbol(self.thisptr.predict(int_query))
 
     def predict_k(self, query, k):
+        """Predict the k next elements
+
+        Parameters:
+        query (list[any]), any: should be of the same type as the fit method.
+        k (in): The maximum number of elements to predict
+
+        Returns:
+        list[int]: The predictions if any sorted by relevance. The number of predictions can vary from 0 to k included.
+        """
         cdef vector[int] int_query
         cdef vector[int] predictions
         for symbol in query:
