@@ -31,7 +31,7 @@ module = Extension(
     extra_link_args=compile_args,
 )
 
-version = "1.0.2"
+version = "1.0.3"
 
 author = "Bluesheeptoken"
 author_email = "louis.fruleux1@gmail.com"
@@ -61,5 +61,5 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url=url,
-    python_requires=">=3.6, <4"
+    python_requires=">=3.7, <4"
 )
