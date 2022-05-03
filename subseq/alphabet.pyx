@@ -11,7 +11,7 @@ cdef class Alphabet:
         return len(self.symbols)
 
     def get_symbol(self, int index):
-        if 0 <= index < self.length():
+        if 0 < index < self.length():
             return self.symbols[index]
         return None
 

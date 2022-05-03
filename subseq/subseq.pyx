@@ -46,7 +46,12 @@ cdef class Subseq:
         for symbol in query:
            int_query.push_back(self.alphabet.get_index(symbol))
         predictions = self.thisptr.predict_k(int_query, k)
-        return [self.alphabet.get_symbol(index) for index in predictions]
+        predicted_symbols = []
+        for index in predictions:
+            symbol = self.alphabet.get_symbol(index)
+            if symbol:
+                predicted_symbols.append(symbol)
+        return predicted_symbols
 
     def __getstate__(self):
         return (self.thisptr.get_state(),
