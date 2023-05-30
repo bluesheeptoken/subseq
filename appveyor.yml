@@ -38,7 +38,10 @@ environment:
       PYTHON_ARCH: "64"
       PYTHON_HOME: "C:\\Python310-x64"
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    # Python 3.11 not yet supported https://www.appveyor.com/docs/windows-images-software/
+    - PYTHON_VERSION: "3.11"
+      PYTHON_ARCH: "64"
+      PYTHON_HOME: "C:\\Python311-x64"
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
 
 install:
   # Ensure we use the right python version
