@@ -8,5 +8,5 @@ if [[ "$RUNNER_OS" == "macOS" ]]; then
     export CXX=/usr/bin/clang++
 fi
 
-python -m pip install cibuildwheel==2.1.1
+python -m pip install cibuildwheel==2.11.1
 python -m cibuildwheel --output-dir wheelhouse
