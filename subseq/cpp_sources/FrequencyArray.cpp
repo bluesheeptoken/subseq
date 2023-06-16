@@ -69,3 +69,13 @@ const std::vector<int> FrequencyArray::get_k_best_letter(std::size_t k) {
 
     return best_predictions;
 }
+
+const std::vector<std::pair<int, float>>
+FrequencyArray::get_k_best_letter_with_weights(std::size_t k) {
+    std::vector<int> predictions = FrequencyArray::get_k_best_letter(k);
+    std::vector<std::pair<int, float>> predictions_with_weights;
+    for (auto& prediction : predictions)
+        predictions_with_weights.push_back(
+            std::make_pair(prediction, m_weights[prediction]));
+    return predictions_with_weights;
+}

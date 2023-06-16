@@ -82,6 +82,12 @@ const std::vector<int> CSubseq::predict_k(const std::vector<int>& query,
     return frequency_array.get_k_best_letter(k);
 }
 
+const std::vector<std::pair<int, float>> CSubseq::predict_k_with_weights(
+    const std::vector<int>& query, std::size_t k) {
+    FrequencyArray frequency_array = compute_frequency_array(query);
+    return frequency_array.get_k_best_letter_with_weights(k);
+}
+
 const FrequencyArray CSubseq::compute_frequency_array(
     const std::vector<int>& query) {
     FrequencyArray frequency_array(m_alphabet_size);

@@ -26,7 +26,8 @@ class CSubseq {
     const int predict(const std::vector<int>& query);
     const std::vector<int> predict_k(const std::vector<int>& query,
                                      std::size_t k);
-
+    const std::vector<std::pair<int, float>> predict_k_with_weights(
+        const std::vector<int>& query, std::size_t k);
     const std::string get_state() const;
 
    private:

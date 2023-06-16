@@ -14,6 +14,8 @@ class FrequencyArray {
 
     const int get_best_letter();
     const std::vector<int> get_k_best_letter(std::size_t k);
+    const std::vector<std::pair<int, float>> get_k_best_letter_with_weights(
+        std::size_t k);
 
    private:
     std::vector<float> m_weights;
