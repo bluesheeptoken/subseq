@@ -25,6 +25,16 @@ class SubseqTest(unittest.TestCase):
         model.fit(["ab", "ac", "ac"])
         self.assertEqual(model.predict_k("a", 3), ["c", "b"])
 
+    def test_predict_k_with_weights(self):
+        model = Subseq(0)
+        model.fit(["ab", "ac", "ac"])
+        self.assertEqual(model.predict_k_with_weights("a", 2), {"c": 8.0, "b": 4.0})
+
+    def test_predict_k_with_weights_not_enough_predictions(self):
+        model = Subseq(0)
+        model.fit(["ab", "ac", "ac"])
+        self.assertEqual(model.predict_k_with_weights("a", 3), {"c": 8.0, "b": 4.0})
+
     def test_pickle(self):
         model = Subseq(0)
         model.fit(["banana"])

@@ -1,6 +1,7 @@
 # distutils: language = c++
 
 from libcpp.vector cimport vector
+from libcpp.pair cimport pair
 from subseq.alphabet cimport Alphabet
 from libcpp.string cimport string
 
@@ -11,6 +12,7 @@ cdef extern from "cpp_sources/CSubseq.hpp":
         CSubseq(string) except +
         int predict(vector[int])
         vector[int] predict_k(vector[int], int)
+        vector[pair[int, float]] predict_k_with_weights(vector[int], int)
         string get_state()
 
 cdef class Subseq:
@@ -77,6 +79,30 @@ cdef class Subseq:
             if symbol:
                 predicted_symbols.append(symbol)
         return predicted_symbols
+
+
+    def predict_k_with_weights(self, query, k):
+        """Predict the k next elements with associated internal weights
+        these weights have sense only in the context of relative weights, they are not confidence of predictions.
+
+        Parameters:
+        query (list[any]), any: should be of the same type as the fit method.
+        k (in): The maximum number of elements to predict
+
+        Returns:
+        dict[int, float]: The predictions with associated weight if any sorted by relevance. The number of predictions can vary from 0 to k included.
+        """
+        cdef vector[int] int_query
+        cdef vector[pair[int, float]] predictions_with_weights
+        for symbol in query:
+            int_query.push_back(self.alphabet.get_index(symbol))
+        predictions_with_weights = self.thisptr.predict_k_with_weights(int_query, k)
+        predicted_symbols_with_weights = {}
+        for index, weight in predictions_with_weights:
+            symbol = self.alphabet.get_symbol(index)
+            if symbol:
+                predicted_symbols_with_weights[symbol] = weight
+        return predicted_symbols_with_weights
 
     def __getstate__(self):
         return (self.thisptr.get_state(),
